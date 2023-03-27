@@ -30,5 +30,39 @@ namespace Helpdesk
             //int myNumber = int.Parse(GridView1.SelectedRow.Cells[idxx].Text.ToString().Trim());     //CONVERT a string to an integer
             //grdSelectedPerson.SelectRow(myNumber - 1);        //The Value in this GRID begins at 0, so had to USE minus 1 (because the VALUE began at 1)
         }
+
+        protected void btnSaveNewItem_Click(object sender, EventArgs e)
+        {
+            HelpdeskEntities db = new HelpdeskEntities();     //Your Database as listed in your Web.config FILE under: <connectionStrings> < add name = "testEntities" ...  < add name = "testEntities1" ...
+            var user = new User();
+            user.FirstName = txtFirstname.Text.ToString();
+            user.LastName = txtLastname.Text.ToString();
+            user.Passcode = txtPassword.Text.ToString(); 
+            user.Email = txtEmail.Text.ToString();  
+            db.Users.Add(user);
+            db.SaveChanges();
+            GridView1.DataBind();
+        }
+
+        protected void btnSaveEdit_Click(object sender, EventArgs e)
+        {
+            HelpdeskEntities db = new HelpdeskEntities();     //Your Database as listed in your Web.config FILE under: <connectionStrings> < add name = "testEntities" ...  < add name = "testEntities1" ...
+            var user = db.Users.Find(GridView1.SelectedValue);
+            user.FirstName = txtFirstname.Text.ToString();
+            user.LastName = txtLastname.Text.ToString();
+            user.Passcode = txtPassword.Text.ToString();
+            user.Email = txtEmail.Text.ToString();
+            db.SaveChanges();
+            GridView1.DataBind();
+        }
+
+        protected void btnDeleteItem_Click(object sender, EventArgs e)
+        {
+            HelpdeskEntities db = new HelpdeskEntities();     //Your Database as listed in your Web.config FILE under: <connectionStrings> < add name = "testEntities" ...  < add name = "testEntities1" ...
+            var user = db.Users.Find(GridView1.SelectedValue);
+            db.Entry(user).State = System.Data.Entity.EntityState.Deleted;
+            db.SaveChanges();
+            GridView1.DataBind();
+        }
     }
 }
